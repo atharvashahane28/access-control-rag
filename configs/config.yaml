@@ -10,6 +10,12 @@ paths:                    # all relative to the repo root
 dataset:
   name: fiqa              # FiQA from the BEIR benchmark
   split: test             # test questions are used for all experiments
+  url: https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/fiqa.zip
+  md5: 17918ed23cd04fb15047f73e6c3bd9d9   # checksum published by BEIR
+
+data_check:
+  n_samples: 15           # question and passage pairs to read by eye
+  max_chars: 800          # longer passages are cut off in the samples file
 
 retrieval:
   k: 5                    # top 5 passages go into the prompt
