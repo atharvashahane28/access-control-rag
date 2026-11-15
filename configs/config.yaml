@@ -22,3 +22,12 @@ retrieval:
 
 organization:
   n_departments: 20       # k-means clusters used as departments
+
+embedding:
+  model: sentence-transformers/all-mpnet-base-v2   # changing this means re-running Step 2 onwards
+  batch_size: 32          # passages embedded at a time; lower it if memory runs short
+  query_prefix: ""        # text put in front of every question; some models (for example bge) need one
+  test_n: 1000            # passages used by the quick timing test (python -m src.embed --test)
+
+embedding_check:
+  ks: [5, 10]             # baseline is reported for the top 5 and the top 10
