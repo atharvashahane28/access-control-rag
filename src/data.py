@@ -64,26 +64,37 @@ def _read_jsonl(path):
         return [json.loads(line) for line in f if line.strip()]
 
 
-def load_corpus(cfg):
-    """All passages. Columns: passage_id, text. IDs are strings."""
+def load_corpus(cfg, clean=True):
+    """All passages. Columns: passage_id, text. IDs are strings.
+
+    With clean=True (the default), passages with no text are removed.
+    """
     rows = _read_jsonl(dataset_dir(cfg) / "corpus.jsonl")
-    return pd.DataFrame(
+    df = pd.DataFrame(
         {
             "passage_id": [str(r["_id"]) for r in rows],
             "text": [r["text"] for r in rows],
         }
     )
+    if clean:
+        df = df[df["text"].str.strip() != ""].reset_index(drop=True)
+    return df
 
 
-def load_qrels(cfg):
+def load_qrels(cfg, clean=True):
     """Relevance labels for the split in the config.
 
     Columns: question_id, passage_id. One row per relevant passage.
+    With clean=True (the default), labels that point to a removed (empty)
+    passage are removed too.
     """
     path = dataset_dir(cfg) / "qrels" / (cfg["dataset"]["split"] + ".tsv")
     df = pd.read_csv(path, sep="\t", dtype=str)
     df = df[df["score"].astype(int) > 0]
     df = df.rename(columns={"query-id": "question_id", "corpus-id": "passage_id"})
+    if clean:
+        kept = set(load_corpus(cfg)["passage_id"])
+        df = df[df["passage_id"].isin(kept)]
     return df[["question_id", "passage_id"]].reset_index(drop=True)
 
 

@@ -20,15 +20,20 @@ def main():
     words = corpus["text"].str.split().str.len()
     per_question = qrels.groupby("question_id").size()
     passage_ids = set(corpus["passage_id"])
+    raw_corpus = load_corpus(cfg, clean=False)
+    raw_qrels = load_qrels(cfg, clean=False)
 
     stats = [
         ("Dataset", cfg["dataset"]["name"]),
         ("Split", cfg["dataset"]["split"]),
         ("Passages", len(corpus)),
         ("Duplicate passage IDs", int(corpus["passage_id"].duplicated().sum())),
-        ("Empty passages", int((words == 0).sum())),
+        ("Empty passages removed", len(raw_corpus) - len(corpus)),
         ("Questions", len(queries)),
         ("Relevance labels", len(qrels)),
+        ("Labels removed (pointed to an empty passage)", len(raw_qrels) - len(qrels)),
+        ("Questions removed (no label left)",
+         raw_qrels["question_id"].nunique() - len(queries)),
         ("Questions with no label", len(queries) - per_question.size),
         ("Labels pointing to a missing passage",
          int((~qrels["passage_id"].isin(passage_ids)).sum())),
