@@ -1,0 +1,18 @@
+# Every setting for the project lives in this one file.
+# Code must read values from here and never hard-code them.
+
+seed: 42                  # the one random seed, used everywhere
+
+paths:                    # all relative to the repo root
+  data_dir: data          # downloaded and generated data (not in git)
+  results_dir: results    # result tables and plots
+
+dataset:
+  name: fiqa              # FiQA from the BEIR benchmark
+  split: test             # test questions are used for all experiments
+
+retrieval:
+  k: 5                    # top 5 passages go into the prompt
+
+organization:
+  n_departments: 20       # k-means clusters used as departments

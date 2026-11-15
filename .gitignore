@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project: keep large files out of git
+data/
+*.npy
+*.npz
+*.faiss
+*.index
+results/raw/
