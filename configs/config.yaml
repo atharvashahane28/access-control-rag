@@ -22,6 +22,21 @@ retrieval:
 
 organization:
   n_departments: 20       # k-means clusters used as departments
+  kmeans_n_init: 10
+  kmeans_max_iter: 300
+  kmeans_tol: 0.0001
+  n_threads: 4            # limit clustering CPU threads
+  departments_per_role:
+    low: 1
+    medium: 4
+    high: 16
+  users_per_home:
+    low: 1
+    medium: 2            # second user also gets one outside department role
+    high: 2
+
+reference:
+  n_threads: 4            # exact FAISS search uses CPU; embeddings are reused
 
 embedding:
   model: sentence-transformers/all-mpnet-base-v2   # changing this means re-running Step 2 onwards
